@@ -2,7 +2,7 @@ import json
 import gzip
 import websockets
 from ccxtws.base import Exchange, ExchangeObserver
-from cryptobrick import logutils
+from . import logutils
 from . import utils
 
 logger = logutils.get_logger('ccxtws')
