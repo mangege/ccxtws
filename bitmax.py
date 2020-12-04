@@ -1,7 +1,7 @@
 import json
 import websockets
 from ccxtws.base import Exchange, ExchangeObserver
-from cryptobrick import logutils
+from . import logutils
 
 logger = logutils.get_logger('ccxtws')
 
@@ -21,6 +21,7 @@ class bitmax(Exchange):
             try:
                 await self._run()
             except Exception as e:
+                self.wipe_orderbook()
                 logger.exception(e)
 
     async def _run(self):

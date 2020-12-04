@@ -21,6 +21,7 @@ class poloniex(Exchange):
             try:
                 await self._run()
             except Exception as e:
+                self.wipe_orderbook()
                 logger.exception(e)
 
     async def _run(self):

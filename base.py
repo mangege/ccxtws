@@ -28,3 +28,7 @@ class Exchange(ExchangeBoost, metaclass=ABCMeta):
     @abstractmethod
     async def run(self):
         pass
+
+    def wipe_orderbook(self):
+        for observer in self.observers:
+            observer.update({'full': True, 'asks': [], 'bids': []})
