@@ -10,6 +10,8 @@ exchanges_ws = [
     'biki', 'biki_observer',
     'huobipro', 'huobipro_observer',
     'gateio', 'gateio_observer',
+    'bibox', 'bibox_observer',
+    'bitmax', 'bitmax_observer',
 ]
 
 __all__ = exchanges_ws
