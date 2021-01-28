@@ -29,15 +29,13 @@ class gateio(Exchange):
 
     async def _run(self):
         async with websockets.connect(self.ws_uri, ping_interval=None) as websocket:
-            added_channels = set()
+            is_added = False
             while True:
-                for channel in self.channels:
-                    if channel in added_channels:
-                        continue
-                    added_channels.add(channel)
+                if not is_added:
                     params = [[item, 20, INTERVALS.get(item, "0.00000001")]for item in self.channels]
                     req = json.dumps({"id": utils.get_req_id(), "method": "depth.subscribe", "params": params})
                     await websocket.send(req)
+                    is_added = True
                 resp = await websocket.recv()
                 data = json.loads(resp)
                 if 'method' in data and data['method'] == 'depth.update':
