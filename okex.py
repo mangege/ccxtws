@@ -9,24 +9,13 @@ logger = logutils.get_logger('ccxtws')
 
 class okex(Exchange):
     def __init__(self):
+        super().__init__()
+        # https://www.okex.com/docs/zh/
         self.ws_uri = 'wss://real.okex.com:8443/ws/v3'
-        self.observers = []
-        self.channels = set()
-        self.is_running = False
-
-    async def run(self):
-        if self.is_running:
-            return
-        self.is_running = True
-        while True:
-            try:
-                await self._run()
-            except Exception as e:
-                self.wipe_orderbook()
-                logger.exception(e)
 
     async def _run(self):
         async with websockets.connect(self.ws_uri) as websocket:
+            self.ws_conn = websocket
             is_added = False
             while True:
                 params = {"op": "subscribe", "args": [f'spot/depth5:{item}' for item in self.channels]}
@@ -41,14 +30,6 @@ class okex(Exchange):
                     self.notify(data)
                 else:
                     logger.warning("unknown data %s", data)
-
-    def subscribe(self, observer):
-        self.observers.append(observer)
-        self.channels.add(observer.channel)
-
-    def unsubscribe(self, observer):
-        self.observers.remove(observer)
-        self.channels = set([observer.channel for observer in self.observers])
 
     def notify(self, data):
         final_data = {'full': True, 'asks': [], 'bids': []}
