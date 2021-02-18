@@ -7,33 +7,22 @@ from . import utils
 
 logger = logutils.get_logger('ccxtws')
 
-INTERVALS = {"SUSHI_USDT": "0.001"}
-
 
 class kucoin(Exchange):
     def __init__(self):
-        self.observers = []
-        self.channels = set()
-        self.is_running = False
-
-    async def run(self):
-        if self.is_running:
-            return
-        self.is_running = True
-        while True:
-            try:
-                await self._run()
-            except Exception as e:
-                self.wipe_orderbook()
-                logger.exception(e)
+        super().__init__()
+        # https://docs.kucoin.com/cn/#88387098a2
+        self.ping_sleep_time = 60
 
     async def _run(self):
         exchange = self.observers[0].exchange
         resp = await exchange.publicPostBulletPublic()
         endpoint = resp['data']['instanceServers'][0]['endpoint']
+        self.ping_sleep_time = resp['data']['instanceServers'][0]['pingInterval']
         token = resp['data']['token']
         ws_uri = f'{endpoint}?token={token}'
         async with websockets.connect(ws_uri) as websocket:
+            self.ws_conn = websocket
             is_available = False
             is_added = False
             while True:
@@ -58,13 +47,9 @@ class kucoin(Exchange):
                 else:
                     logger.warning("unknown data %s", data)
 
-    def subscribe(self, observer):
-        self.observers.append(observer)
-        self.channels.add(observer.channel)
-
-    def unsubscribe(self, observer):
-        self.observers.remove(observer)
-        self.channels = set([observer.channel for observer in self.observers])
+    async def _ping(self):
+        req = json.dumps({"type": "ping", "id": utils.get_req_id()})
+        await self.ws_conn.send(req)
 
     def notify(self, data):
         final_data = {'full': True, 'asks': [], 'bids': []}
