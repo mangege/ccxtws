@@ -1,3 +1,4 @@
+import asyncio
 import json
 import websockets
 from ccxtws.base import Exchange, ExchangeObserver
@@ -6,8 +7,6 @@ from . import utils
 
 logger = logutils.get_logger('ccxtws')
 
-INTERVALS = {"SUSHI_USDT": "0.001"}
-
 
 class gateio(Exchange):
     def __init__(self):
@@ -15,11 +14,13 @@ class gateio(Exchange):
         self.observers = []
         self.channels = set()
         self.is_running = False
+        self.ws_conn = None
 
     async def run(self):
         if self.is_running:
             return
         self.is_running = True
+        asyncio.create_task(self._ping())
         while True:
             try:
                 await self._run()
@@ -29,10 +30,11 @@ class gateio(Exchange):
 
     async def _run(self):
         async with websockets.connect(self.ws_uri, ping_interval=None) as websocket:
+            self.ws_conn = websocket
             is_added = False
             while True:
                 if not is_added:
-                    params = [[item, 20, INTERVALS.get(item, "0.00000001")]for item in self.channels]
+                    params = [[item, 20, '0']for item in self.channels]
                     req = json.dumps({"id": utils.get_req_id(), "method": "depth.subscribe", "params": params})
                     await websocket.send(req)
                     is_added = True
@@ -42,6 +44,17 @@ class gateio(Exchange):
                     self.notify(data)
                 else:
                     logger.warning("unknown data %s", data)
+
+    async def _ping(self):
+        while True:
+            await asyncio.sleep(10)
+            try:
+                if self.ws_conn is None or self.ws_conn.closed:
+                    continue
+                req = json.dumps({"id": utils.get_req_id(), "method": "server.ping", "params": []})
+                await self.ws_conn.send(req)
+            except Exception as e:
+                logger.exception(e)
 
     def subscribe(self, observer):
         self.observers.append(observer)
