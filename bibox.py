@@ -41,14 +41,6 @@ class bibox(Exchange):
         req = json.dumps({"ping": utils.get_req_id()})
         await self.ws_conn.send(req)
 
-    def subscribe(self, observer):
-        self.observers.append(observer)
-        self.channels.add(observer.channel)
-
-    def unsubscribe(self, observer):
-        self.observers.remove(observer)
-        self.channels = set([observer.channel for observer in self.observers])
-
     def notify(self, data):
         if len(data) > 1:
             logger.warning("unknown data %s", data)

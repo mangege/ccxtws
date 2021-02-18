@@ -35,14 +35,6 @@ class gateio(Exchange):
         req = json.dumps({"id": utils.get_req_id(), "method": "server.ping", "params": []})
         await self.ws_conn.send(req)
 
-    def subscribe(self, observer):
-        self.observers.append(observer)
-        self.channels.add(observer.channel)
-
-    def unsubscribe(self, observer):
-        self.observers.remove(observer)
-        self.channels = set([observer.channel for observer in self.observers])
-
     def notify(self, data):
         final_data = {'asks': [], 'bids': []}
         final_data['full'] = data['params'][0]

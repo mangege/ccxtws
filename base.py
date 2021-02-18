@@ -66,3 +66,11 @@ class Exchange(ExchangeBoost, metaclass=ABCMeta):
                 await self._ping()
             except Exception as e:
                 logger.exception(e)
+
+    def subscribe(self, observer):
+        self.observers.append(observer)
+        self.channels.add(observer.channel)
+
+    def unsubscribe(self, observer):
+        self.observers.remove(observer)
+        self.channels = set([observer.channel for observer in self.observers])

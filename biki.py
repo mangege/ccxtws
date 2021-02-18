@@ -9,24 +9,13 @@ logger = logutils.get_logger('ccxtws')
 
 class biki(Exchange):
     def __init__(self):
+        super().__init__()
+        # https://github.com/code-biki/open-api/blob/master/README.md#websocket-api
         self.ws_uri = 'wss://ws.biki.com/kline-api/ws'
-        self.observers = []
-        self.channels = set()
-        self.is_running = False
-
-    async def run(self):
-        if self.is_running:
-            return
-        self.is_running = True
-        while True:
-            try:
-                await self._run()
-            except Exception as e:
-                self.wipe_orderbook()
-                logger.exception(e)
 
     async def _run(self):
         async with websockets.connect(self.ws_uri) as websocket:
+            self.ws_conn = websocket
             added_channels = set()
             while True:
                 for channel in self.channels:
