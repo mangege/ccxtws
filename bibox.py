@@ -4,30 +4,21 @@ import gzip
 import websockets
 from ccxtws.base import Exchange, ExchangeObserver
 from . import logutils
+from . import utils
 
 logger = logutils.get_logger('ccxtws')
 
 
 class bibox(Exchange):
     def __init__(self):
+        super().__init__()
+        # https://biboxcom.github.io/zh-hans/
         self.ws_uri = 'wss://push.bibox.com'
-        self.observers = []
-        self.channels = set()
-        self.is_running = False
-
-    async def run(self):
-        if self.is_running:
-            return
-        self.is_running = True
-        while True:
-            try:
-                await self._run()
-            except Exception as e:
-                self.wipe_orderbook()
-                logger.exception(e)
+        self.ping_sleep_time = 60
 
     async def _run(self):
         async with websockets.connect(self.ws_uri) as websocket:
+            self.ws_conn = websocket
             added_channels = set()
             while True:
                 for channel in self.channels:
@@ -41,8 +32,14 @@ class bibox(Exchange):
                 if 'ping' in data:
                     req = json.dumps({"pong": data['ping']})
                     await websocket.send(req)
+                elif 'pong' in data:
+                    logger.warning("ping data %s", data)
                 else:
                     self.notify(data)
+
+    async def _ping(self):
+        req = json.dumps({"ping": utils.get_req_id()})
+        await self.ws_conn.send(req)
 
     def subscribe(self, observer):
         self.observers.append(observer)
