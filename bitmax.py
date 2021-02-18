@@ -8,24 +8,14 @@ logger = logutils.get_logger('ccxtws')
 
 class bitmax(Exchange):
     def __init__(self):
+        super().__init__()
+        # https://bitmax-exchange.github.io/bitmax-pro-api/#general-message-request-handling-logic-from-client-side
         self.ws_uri = 'wss://bitmax.io/0/api/pro/v1/stream'
-        self.observers = []
-        self.channels = set()
-        self.is_running = False
-
-    async def run(self):
-        if self.is_running:
-            return
-        self.is_running = True
-        while True:
-            try:
-                await self._run()
-            except Exception as e:
-                self.wipe_orderbook()
-                logger.exception(e)
+        self.ping_sleep_time = 30
 
     async def _run(self):
         async with websockets.connect(self.ws_uri) as websocket:
+            self.ws_conn = websocket
             added_channels = set()
             while True:
                 for channel in self.channels:
@@ -46,13 +36,9 @@ class bitmax(Exchange):
                 else:
                     logger.warning("unknown data %s", data)
 
-    def subscribe(self, observer):
-        self.observers.append(observer)
-        self.channels.add(observer.channel)
-
-    def unsubscribe(self, observer):
-        self.observers.remove(observer)
-        self.channels = set([observer.channel for observer in self.observers])
+    async def _ping(self):
+        req = json.dumps({"op": "ping"})
+        await self.ws_conn.send(req)
 
     def notify(self, data):
         final_data = {'asks': [], 'bids': []}
