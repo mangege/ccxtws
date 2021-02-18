@@ -10,24 +10,12 @@ logger = logutils.get_logger('ccxtws')
 
 class huobipro(Exchange):
     def __init__(self):
+        super().__init__()
         self.ws_uri = 'wss://api.huobi.pro/ws'
-        self.observers = []
-        self.channels = set()
-        self.is_running = False
-
-    async def run(self):
-        if self.is_running:
-            return
-        self.is_running = True
-        while True:
-            try:
-                await self._run()
-            except Exception as e:
-                self.wipe_orderbook()
-                logger.exception(e)
 
     async def _run(self):
         async with websockets.connect(self.ws_uri) as websocket:
+            self.ws_conn = websocket
             added_channels = set()
             while True:
                 for channel in self.channels:
@@ -44,14 +32,6 @@ class huobipro(Exchange):
                     await websocket.send(req)
                 else:
                     self.notify(data)
-
-    def subscribe(self, observer):
-        self.observers.append(observer)
-        self.channels.add(observer.channel)
-
-    def unsubscribe(self, observer):
-        self.observers.remove(observer)
-        self.channels = set([observer.channel for observer in self.observers])
 
     def notify(self, data):
         if 'tick' not in data:
