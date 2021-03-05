@@ -6,6 +6,7 @@ from ccxtws.bibox import bibox, bibox_observer  # noqa: F401
 from ccxtws.bitmax import bitmax, bitmax_observer  # noqa: F401
 from ccxtws.kucoin import kucoin, kucoin_observer  # noqa: F401
 from ccxtws.okex import okex, okex_observer  # noqa: F401
+from ccxtws.mxc import mxc, mxc_observer  # noqa: F401
 
 exchanges_ws = [
     'poloniex', 'poloniex_observer',
@@ -14,6 +15,7 @@ exchanges_ws = [
     'gateio', 'gateio_observer',
     'bibox', 'bibox_observer',
     'bitmax', 'bitmax_observer',
+    'mxc', 'mxc_observer',
     'kucoin', 'kucoin_observer',
     'okex', 'okex_observer',
 ]

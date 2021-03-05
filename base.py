@@ -39,6 +39,7 @@ class Exchange(ExchangeBoost, metaclass=ABCMeta):
         self.channels = set()
         self.is_running = False
         self.ws_conn = None
+        self.max_observers = 0
 
     def wipe_orderbook(self):
         for observer in self.observers:
@@ -68,6 +69,8 @@ class Exchange(ExchangeBoost, metaclass=ABCMeta):
                 logger.exception(e)
 
     def subscribe(self, observer):
+        if self.max_observers > 0 and len(self.observers) >= self.max_observers:
+            raise RuntimeError(f"max observers limit {self.max_observers}")
         self.observers.append(observer)
         self.channels.add(observer.channel)
 
