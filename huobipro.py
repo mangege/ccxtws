@@ -1,11 +1,8 @@
 import json
 import gzip
 import websockets
-from ccxtws.base import Exchange, ExchangeObserver
-from . import logutils
+from ccxtws.base import Exchange, ExchangeObserver, logger
 from . import utils
-
-logger = logutils.get_logger('ccxtws')
 
 
 class huobipro(Exchange):

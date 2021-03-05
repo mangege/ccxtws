@@ -1,9 +1,6 @@
 import json
 import websockets
-from ccxtws.base import Exchange, ExchangeObserver
-from . import logutils
-
-logger = logutils.get_logger('ccxtws')
+from ccxtws.base import Exchange, ExchangeObserver, logger
 
 
 class bitmax(Exchange):

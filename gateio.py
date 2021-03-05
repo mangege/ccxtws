@@ -1,10 +1,7 @@
 import json
 import websockets
-from ccxtws.base import Exchange, ExchangeObserver
-from . import logutils
+from ccxtws.base import Exchange, ExchangeObserver, logger
 from . import utils
-
-logger = logutils.get_logger('ccxtws')
 
 
 class gateio(Exchange):
