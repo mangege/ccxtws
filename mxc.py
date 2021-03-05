@@ -15,7 +15,7 @@ class mxc(Exchange):
         self.max_observers = 1
 
     async def _run(self):
-        async with websockets.connect(self.ws_uri) as websocket:
+        async with websockets.connect(self.ws_uri, ping_interval=None) as websocket:
             self.ws_conn = websocket
             added_channels = set()
             while True:
