@@ -10,6 +10,7 @@ class gateio(Exchange):
         # https://www.gate.io/docs/websocket/index.html#general
         self.ws_uri = 'wss://ws.gate.io/v3/'
         self.ping_sleep_time = 10
+        self.max_observers = -1
 
     async def _run(self):
         async with websockets.connect(self.ws_uri, ping_interval=None) as websocket:

@@ -9,6 +9,7 @@ class okex(Exchange):
         super().__init__()
         # https://www.okex.com/docs/zh/
         self.ws_uri = 'wss://real.okex.com:8443/ws/v3'
+        self.max_observers = 100
 
     async def _run(self):
         async with websockets.connect(self.ws_uri) as websocket:

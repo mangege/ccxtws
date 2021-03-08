@@ -12,6 +12,7 @@ class bibox(Exchange):
         # https://biboxcom.github.io/zh-hans/
         self.ws_uri = 'wss://push.bibox.com'
         self.ping_sleep_time = 60
+        self.max_observers = 20
 
     async def _run(self):
         async with websockets.connect(self.ws_uri) as websocket:

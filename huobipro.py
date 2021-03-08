@@ -8,7 +8,9 @@ from . import utils
 class huobipro(Exchange):
     def __init__(self):
         super().__init__()
+        # https://huobiapi.github.io/docs/spot/v1/cn/#5ea2e0cde2-11
         self.ws_uri = 'wss://api.huobi.pro/ws'
+        self.max_observers = 10
 
     async def _run(self):
         async with websockets.connect(self.ws_uri) as websocket:

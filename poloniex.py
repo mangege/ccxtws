@@ -6,7 +6,9 @@ from ccxtws.base import Exchange, ExchangeObserver, logger
 class poloniex(Exchange):
     def __init__(self):
         super().__init__()
+        # https://docs.poloniex.com/#introduction
         self.ws_uri = 'wss://api2.poloniex.com'
+        self.max_observers = -1
 
     async def _run(self):
         async with websockets.connect(self.ws_uri) as websocket:

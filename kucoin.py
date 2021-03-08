@@ -10,6 +10,7 @@ class kucoin(Exchange):
         super().__init__()
         # https://docs.kucoin.com/cn/#88387098a2
         self.ping_sleep_time = 60
+        self.max_observers = 100
 
     async def _run(self):
         exchange = self.observers[0].exchange

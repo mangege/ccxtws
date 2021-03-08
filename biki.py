@@ -9,6 +9,7 @@ class biki(Exchange):
         super().__init__()
         # https://github.com/code-biki/open-api/blob/master/README.md#websocket-api
         self.ws_uri = 'wss://ws.biki.com/kline-api/ws'
+        self.max_observers = -1
 
     async def _run(self):
         async with websockets.connect(self.ws_uri) as websocket:

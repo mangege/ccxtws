@@ -9,6 +9,7 @@ class bitmax(Exchange):
         # https://bitmax-exchange.github.io/bitmax-pro-api/#general-message-request-handling-logic-from-client-side
         self.ws_uri = 'wss://bitmax.io/0/api/pro/v1/stream'
         self.ping_sleep_time = 30
+        self.max_observers = 10
 
     async def _run(self):
         async with websockets.connect(self.ws_uri) as websocket:
