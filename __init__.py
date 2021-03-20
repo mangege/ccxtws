@@ -7,6 +7,7 @@ from ccxtws.bitmax import bitmax, bitmax_observer  # noqa: F401
 from ccxtws.kucoin import kucoin, kucoin_observer  # noqa: F401
 from ccxtws.okex import okex, okex_observer  # noqa: F401
 from ccxtws.mxc import mxc, mxc_observer  # noqa: F401
+from ccxtws.coinex import coinex, coinex_observer  # noqa: F401
 
 exchanges_ws = [
     'poloniex', 'poloniex_observer',
@@ -18,6 +19,7 @@ exchanges_ws = [
     'mxc', 'mxc_observer',
     'kucoin', 'kucoin_observer',
     'okex', 'okex_observer',
+    'coinex', 'coinex_observer',
 ]
 
 __all__ = exchanges_ws

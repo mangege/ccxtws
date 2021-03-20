@@ -4,12 +4,12 @@ from ccxtws.base import Exchange, ExchangeObserver, logger
 from . import utils
 
 
-class gateio(Exchange):
+class coinex(Exchange):
     def __init__(self):
         super().__init__()
-        # https://www.gate.io/docs/websocket/index.html#general
-        self.ws_uri = 'wss://ws.gate.io/v3/'
-        self.ping_sleep_time = 10
+        # https://github.com/coinexcom/coinex_exchange_api/wiki/041request_description
+        self.ws_uri = 'wss://socket.coinex.com/'
+        self.ping_sleep_time = 5
         self.max_observers = -1
 
     async def _run(self):
@@ -19,7 +19,7 @@ class gateio(Exchange):
             while True:
                 if not is_added:
                     params = [[item, 5, '0']for item in self.channels]
-                    req = json.dumps({"id": utils.get_req_id(), "method": "depth.subscribe", "params": params})
+                    req = json.dumps({"id": utils.get_req_id(), "method": "depth.subscribe_multi", "params": params})
                     await websocket.send(req)
                     is_added = True
                 resp = await websocket.recv()
@@ -47,7 +47,7 @@ class gateio(Exchange):
             observer.update(final_data)
 
 
-class gateio_observer(ExchangeObserver):
+class coinex_observer(ExchangeObserver):
     def __init__(self, exchange, symbol, callback):
         market = exchange.market(symbol)
         self.channel = market['id'].upper()
