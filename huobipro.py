@@ -21,7 +21,7 @@ class huobipro(Exchange):
                     if channel in added_channels:
                         continue
                     added_channels.add(channel)
-                    req = json.dumps({"sub": f"market.{channel}.mbp.refresh.20", "id": utils.get_req_id()})
+                    req = json.dumps({"sub": f"market.{channel}.mbp.refresh.5", "id": utils.get_req_id()})
                     await websocket.send(req)
                 resp = await websocket.recv()
                 decoded_data = gzip.decompress(resp)

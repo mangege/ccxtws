@@ -20,7 +20,7 @@ class biki(Exchange):
                     if channel in added_channels:
                         continue
                     added_channels.add(channel)
-                    req = json.dumps({"event": "sub", "params": {"channel": f"market_{channel}_depth_step0", "asks": 100, "bids": 100}})
+                    req = json.dumps({"event": "sub", "params": {"channel": f"market_{channel}_depth_step0", "asks": 5, "bids": 5}})
                     await websocket.send(req)
                 resp = await websocket.recv()
                 decoded_data = gzip.decompress(resp)
