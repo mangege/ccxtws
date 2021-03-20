@@ -29,8 +29,7 @@ class binance(Exchange):
                     added_channels.add(channel)
                     req = json.dumps({"method": "SUBSCRIBE", "params": [f"{channel}@depth5@100ms"], "id": utils.get_req_id()})
                     await websocket.send(req)
-                    if len(self.channels) >= 4:
-                        await asyncio.sleep(0.25)
+                    await asyncio.sleep(0.25)
                 resp = await websocket.recv()
                 data = json.loads(resp)
                 if 'ping' in data:
