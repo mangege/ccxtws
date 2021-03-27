@@ -9,6 +9,7 @@ from ccxtws.okex import okex, okex_observer  # noqa: F401
 from ccxtws.mxc import mxc, mxc_observer  # noqa: F401
 from ccxtws.coinex import coinex, coinex_observer  # noqa: F401
 from ccxtws.hitbtc import hitbtc, hitbtc_observer  # noqa: F401
+from ccxtws.binance import binance, binance_observer  # noqa: F401
 
 exchanges_ws = [
     'poloniex', 'poloniex_observer',
@@ -22,6 +23,7 @@ exchanges_ws = [
     'okex', 'okex_observer',
     'coinex', 'coinex_observer',
     'hitbtc', 'hitbtc_observer',
+    'binance', 'binance_observer',
 ]
 
 __all__ = exchanges_ws
