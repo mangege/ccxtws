@@ -1,11 +1,8 @@
 import asyncio
 import json
 import websockets
-from ccxtws.base import Exchange, ExchangeObserver
-from . import logutils
+from ccxtws.base import Exchange, ExchangeObserver, logger
 from . import utils
-
-logger = logutils.get_logger('ccxtws')
 
 
 class binance(Exchange):
@@ -38,16 +35,8 @@ class binance(Exchange):
                 else:
                     self.notify(data)
 
-    def subscribe(self, observer):
-        self.observers.append(observer)
-        self.channels.add(observer.channel)
-
-    def unsubscribe(self, observer):
-        self.observers.remove(observer)
-        self.channels = set([observer.channel for observer in self.observers])
-
     def notify(self, data):
-        if 'asks' not in data['data'] or 'bids' not in data['data']:
+        if 'data' not in data:
             logger.warning("unknown data %s", data)
             return
         final_data = {'full': True, 'asks': [], 'bids': []}
