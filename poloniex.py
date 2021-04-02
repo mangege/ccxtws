@@ -55,7 +55,7 @@ class poloniex(Exchange):
 class poloniex_observer(ExchangeObserver):
     def __init__(self, exchange, symbol, callback):
         market = exchange.market(symbol)
-        self.channel = market['info']['id']
+        self.channel = int(market['info']['id'])
         self.callback = callback
 
     def update(self, data):
