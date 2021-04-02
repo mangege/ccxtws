@@ -3,7 +3,7 @@ from ccxtws.biki import biki, biki_observer  # noqa: F401
 from ccxtws.huobipro import huobipro, huobipro_observer  # noqa: F401
 from ccxtws.gateio import gateio, gateio_observer  # noqa: F401
 from ccxtws.bibox import bibox, bibox_observer  # noqa: F401
-from ccxtws.bitmax import bitmax, bitmax_observer  # noqa: F401
+from ccxtws.ascendex import ascendex, ascendex_observer  # noqa: F401
 from ccxtws.kucoin import kucoin, kucoin_observer  # noqa: F401
 from ccxtws.okex import okex, okex_observer  # noqa: F401
 from ccxtws.mxc import mxc, mxc_observer  # noqa: F401
@@ -17,7 +17,7 @@ exchanges_ws = [
     'huobipro', 'huobipro_observer',
     'gateio', 'gateio_observer',
     'bibox', 'bibox_observer',
-    'bitmax', 'bitmax_observer',
+    'ascendex', 'ascendex_observer',
     'mxc', 'mxc_observer',
     'kucoin', 'kucoin_observer',
     'okex', 'okex_observer',

@@ -3,11 +3,11 @@ import websockets
 from ccxtws.base import Exchange, ExchangeObserver, logger
 
 
-class bitmax(Exchange):
+class ascendex(Exchange):
     def __init__(self):
         super().__init__()
-        # https://bitmax-exchange.github.io/bitmax-pro-api/#general-message-request-handling-logic-from-client-side
-        self.ws_uri = 'wss://bitmax.io/0/api/pro/v1/stream'
+        # https://ascendex.github.io/ascendex-pro-api/#ascendex-pro-api-documentation
+        self.ws_uri = 'wss://ascendex.com/0/api/v1/pro/stream'
         self.ping_sleep_time = 30
         self.max_observers = 10
 
@@ -53,7 +53,7 @@ class bitmax(Exchange):
             observer.update(final_data)
 
 
-class bitmax_observer(ExchangeObserver):
+class ascendex_observer(ExchangeObserver):
     def __init__(self, exchange, symbol, callback):
         market = exchange.market(symbol)
         self.channel = market['id']
