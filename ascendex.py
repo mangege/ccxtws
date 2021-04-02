@@ -7,7 +7,7 @@ class ascendex(Exchange):
     def __init__(self):
         super().__init__()
         # https://ascendex.github.io/ascendex-pro-api/#ascendex-pro-api-documentation
-        self.ws_uri = 'wss://ascendex.com/0/api/v1/pro/stream'
+        self.ws_uri = 'wss://ascendex.com/0/api/pro/v1/stream'
         self.ping_sleep_time = 30
         self.max_observers = 10
 
