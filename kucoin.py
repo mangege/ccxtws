@@ -16,7 +16,7 @@ class kucoin(Exchange):
         exchange = self.observers[0].exchange
         resp = await exchange.publicPostBulletPublic()
         endpoint = resp['data']['instanceServers'][0]['endpoint']
-        self.ping_sleep_time = resp['data']['instanceServers'][0]['pingInterval'] / 1000
+        self.ping_sleep_time = float(resp['data']['instanceServers'][0]['pingInterval']) / 1000
         token = resp['data']['token']
         ws_uri = f'{endpoint}?token={token}'
         async with websockets.connect(ws_uri) as websocket:
