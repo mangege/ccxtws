@@ -18,7 +18,7 @@ class kraken(Exchange):
             is_added = False
             while True:
                 if not is_added:
-                    req = json.dumps({"event": "subscribe", "subscription": {"name": "book", "depth": 10}, "pair": self.channels, "id": utils.get_req_id()})
+                    req = json.dumps({"event": "subscribe", "subscription": {"name": "book", "depth": 10}, "pair": self.channels})
                     await websocket.send(req)
                     is_added = True
                 resp = await websocket.recv()
